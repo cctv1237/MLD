@@ -9,11 +9,20 @@
 /* Begin PBXBuildFile section */
 		ABBE508A1B40E7A900E4B55B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBE50891B40E7A900E4B55B /* main.m */; };
 		ABBE508D1B40E7A900E4B55B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBE508C1B40E7A900E4B55B /* AppDelegate.m */; };
-		ABBE50901B40E7A900E4B55B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBE508F1B40E7A900E4B55B /* ViewController.m */; };
-		ABBE50931B40E7A900E4B55B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABBE50911B40E7A900E4B55B /* Main.storyboard */; };
 		ABBE50951B40E7A900E4B55B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABBE50941B40E7A900E4B55B /* Images.xcassets */; };
 		ABBE50981B40E7A900E4B55B /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = ABBE50961B40E7A900E4B55B /* LaunchScreen.xib */; };
 		ABBE50A41B40E7AA00E4B55B /* MultiimageLayoutDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBE50A31B40E7AA00E4B55B /* MultiimageLayoutDemoTests.m */; };
+		ABBE50AF1B40E7FC00E4B55B /* BSGridLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBE50AE1B40E7FC00E4B55B /* BSGridLayout.m */; };
+		ABBE50BC1B40F6C100E4B55B /* BSGridBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBE50B21B40F6C100E4B55B /* BSGridBlock.m */; };
+		ABBE50BF1B40F6C100E4B55B /* BSGridPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBE50B81B40F6C100E4B55B /* BSGridPosition.m */; };
+		ABBE50C01B40F6C100E4B55B /* BSGridRect.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBE50BA1B40F6C100E4B55B /* BSGridRect.m */; };
+		ABBE50C41B40F89300E4B55B /* BSGridCoordTranslator.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBE50C31B40F89300E4B55B /* BSGridCoordTranslator.m */; };
+		ABBE50CC1B413B7900E4B55B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBE50C61B413B7900E4B55B /* ViewController.m */; };
+		ABBE50CF1B413B7900E4B55B /* BSGridLayoutCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBE50CB1B413B7900E4B55B /* BSGridLayoutCell.m */; };
+		ABBE50D11B4141C400E4B55B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABBE50D01B4141C400E4B55B /* Main.storyboard */; };
+		ABC6D37D1B423CCE00E3AC77 /* BSGridLayoutCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC6D37C1B423CCE00E3AC77 /* BSGridLayoutCollectionView.m */; };
+		ABC6D37F1B42643600E3AC77 /* BSGridFreeSpace.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC6D37E1B42643600E3AC77 /* BSGridFreeSpace.m */; };
+		ABC6D3811B42644200E3AC77 /* BSGridCalculator.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC6D3801B42644200E3AC77 /* BSGridCalculator.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,14 +41,32 @@
 		ABBE50891B40E7A900E4B55B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		ABBE508B1B40E7A900E4B55B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		ABBE508C1B40E7A900E4B55B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		ABBE508E1B40E7A900E4B55B /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		ABBE508F1B40E7A900E4B55B /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		ABBE50921B40E7A900E4B55B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		ABBE50941B40E7A900E4B55B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		ABBE50971B40E7A900E4B55B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		ABBE509D1B40E7AA00E4B55B /* MultiimageLayoutDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MultiimageLayoutDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABBE50A21B40E7AA00E4B55B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ABBE50A31B40E7AA00E4B55B /* MultiimageLayoutDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MultiimageLayoutDemoTests.m; sourceTree = "<group>"; };
+		ABBE50AD1B40E7FC00E4B55B /* BSGridLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BSGridLayout.h; path = ../BSGridLayout.h; sourceTree = "<group>"; };
+		ABBE50AE1B40E7FC00E4B55B /* BSGridLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BSGridLayout.m; path = ../BSGridLayout.m; sourceTree = "<group>"; };
+		ABBE50B11B40F6C100E4B55B /* BSGridBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSGridBlock.h; sourceTree = "<group>"; };
+		ABBE50B21B40F6C100E4B55B /* BSGridBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSGridBlock.m; sourceTree = "<group>"; };
+		ABBE50B31B40F6C100E4B55B /* BSGridCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSGridCalculator.h; sourceTree = "<group>"; };
+		ABBE50B51B40F6C100E4B55B /* BSGridFreeSpace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSGridFreeSpace.h; sourceTree = "<group>"; };
+		ABBE50B71B40F6C100E4B55B /* BSGridPosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSGridPosition.h; sourceTree = "<group>"; };
+		ABBE50B81B40F6C100E4B55B /* BSGridPosition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSGridPosition.m; sourceTree = "<group>"; };
+		ABBE50B91B40F6C100E4B55B /* BSGridRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSGridRect.h; sourceTree = "<group>"; };
+		ABBE50BA1B40F6C100E4B55B /* BSGridRect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSGridRect.m; sourceTree = "<group>"; };
+		ABBE50C21B40F89300E4B55B /* BSGridCoordTranslator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSGridCoordTranslator.h; sourceTree = "<group>"; };
+		ABBE50C31B40F89300E4B55B /* BSGridCoordTranslator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSGridCoordTranslator.m; sourceTree = "<group>"; };
+		ABBE50C51B413B7900E4B55B /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		ABBE50C61B413B7900E4B55B /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		ABBE50CA1B413B7900E4B55B /* BSGridLayoutCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSGridLayoutCell.h; sourceTree = "<group>"; };
+		ABBE50CB1B413B7900E4B55B /* BSGridLayoutCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSGridLayoutCell.m; sourceTree = "<group>"; };
+		ABBE50D01B4141C400E4B55B /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		ABC6D37B1B423CCE00E3AC77 /* BSGridLayoutCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSGridLayoutCollectionView.h; sourceTree = "<group>"; };
+		ABC6D37C1B423CCE00E3AC77 /* BSGridLayoutCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSGridLayoutCollectionView.m; sourceTree = "<group>"; };
+		ABC6D37E1B42643600E3AC77 /* BSGridFreeSpace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSGridFreeSpace.m; sourceTree = "<group>"; };
+		ABC6D3801B42644200E3AC77 /* BSGridCalculator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSGridCalculator.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,11 +108,16 @@
 		ABBE50861B40E7A900E4B55B /* MultiimageLayoutDemo */ = {
 			isa = PBXGroup;
 			children = (
+				ABBE50B01B40F6C100E4B55B /* LogicGridLayout */,
 				ABBE508B1B40E7A900E4B55B /* AppDelegate.h */,
 				ABBE508C1B40E7A900E4B55B /* AppDelegate.m */,
-				ABBE508E1B40E7A900E4B55B /* ViewController.h */,
-				ABBE508F1B40E7A900E4B55B /* ViewController.m */,
-				ABBE50911B40E7A900E4B55B /* Main.storyboard */,
+				ABBE50C51B413B7900E4B55B /* ViewController.h */,
+				ABBE50C61B413B7900E4B55B /* ViewController.m */,
+				ABBE50D01B4141C400E4B55B /* Main.storyboard */,
+				ABC6D37B1B423CCE00E3AC77 /* BSGridLayoutCollectionView.h */,
+				ABC6D37C1B423CCE00E3AC77 /* BSGridLayoutCollectionView.m */,
+				ABBE50CA1B413B7900E4B55B /* BSGridLayoutCell.h */,
+				ABBE50CB1B413B7900E4B55B /* BSGridLayoutCell.m */,
 				ABBE50941B40E7A900E4B55B /* Images.xcassets */,
 				ABBE50961B40E7A900E4B55B /* LaunchScreen.xib */,
 				ABBE50871B40E7A900E4B55B /* Supporting Files */,
@@ -117,6 +149,27 @@
 				ABBE50A21B40E7AA00E4B55B /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		ABBE50B01B40F6C100E4B55B /* LogicGridLayout */ = {
+			isa = PBXGroup;
+			children = (
+				ABBE50B11B40F6C100E4B55B /* BSGridBlock.h */,
+				ABBE50B21B40F6C100E4B55B /* BSGridBlock.m */,
+				ABBE50B31B40F6C100E4B55B /* BSGridCalculator.h */,
+				ABC6D3801B42644200E3AC77 /* BSGridCalculator.m */,
+				ABBE50B51B40F6C100E4B55B /* BSGridFreeSpace.h */,
+				ABC6D37E1B42643600E3AC77 /* BSGridFreeSpace.m */,
+				ABBE50B71B40F6C100E4B55B /* BSGridPosition.h */,
+				ABBE50B81B40F6C100E4B55B /* BSGridPosition.m */,
+				ABBE50B91B40F6C100E4B55B /* BSGridRect.h */,
+				ABBE50BA1B40F6C100E4B55B /* BSGridRect.m */,
+				ABBE50C21B40F89300E4B55B /* BSGridCoordTranslator.h */,
+				ABBE50C31B40F89300E4B55B /* BSGridCoordTranslator.m */,
+				ABBE50AD1B40E7FC00E4B55B /* BSGridLayout.h */,
+				ABBE50AE1B40E7FC00E4B55B /* BSGridLayout.m */,
+			);
+			path = LogicGridLayout;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -199,9 +252,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ABBE50931B40E7A900E4B55B /* Main.storyboard in Resources */,
 				ABBE50981B40E7A900E4B55B /* LaunchScreen.xib in Resources */,
 				ABBE50951B40E7A900E4B55B /* Images.xcassets in Resources */,
+				ABBE50D11B4141C400E4B55B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -219,8 +272,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ABBE50901B40E7A900E4B55B /* ViewController.m in Sources */,
+				ABC6D37F1B42643600E3AC77 /* BSGridFreeSpace.m in Sources */,
+				ABBE50C01B40F6C100E4B55B /* BSGridRect.m in Sources */,
 				ABBE508D1B40E7A900E4B55B /* AppDelegate.m in Sources */,
+				ABBE50AF1B40E7FC00E4B55B /* BSGridLayout.m in Sources */,
+				ABC6D3811B42644200E3AC77 /* BSGridCalculator.m in Sources */,
+				ABBE50BF1B40F6C100E4B55B /* BSGridPosition.m in Sources */,
+				ABC6D37D1B423CCE00E3AC77 /* BSGridLayoutCollectionView.m in Sources */,
+				ABBE50CC1B413B7900E4B55B /* ViewController.m in Sources */,
+				ABBE50CF1B413B7900E4B55B /* BSGridLayoutCell.m in Sources */,
+				ABBE50C41B40F89300E4B55B /* BSGridCoordTranslator.m in Sources */,
+				ABBE50BC1B40F6C100E4B55B /* BSGridBlock.m in Sources */,
 				ABBE508A1B40E7A900E4B55B /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -244,14 +306,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		ABBE50911B40E7A900E4B55B /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				ABBE50921B40E7A900E4B55B /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		ABBE50961B40E7A900E4B55B /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -416,6 +470,7 @@
 				ABBE50A91B40E7AA00E4B55B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		ABBE50AA1B40E7AA00E4B55B /* Build configuration list for PBXNativeTarget "MultiimageLayoutDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -424,6 +479,7 @@
 				ABBE50AC1B40E7AA00E4B55B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

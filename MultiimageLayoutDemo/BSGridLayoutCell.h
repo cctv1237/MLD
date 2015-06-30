@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  BSFlowLayoutViewCell.h
 //  FlowLayout
 //
 //  Created by LF on 15/6/5.
@@ -7,9 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BSGridLayout.h"
 
-@interface ViewController : UICollectionViewController
+@interface BSGridLayoutCell : UICollectionViewCell
 
 @end
-
