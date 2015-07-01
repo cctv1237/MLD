@@ -25,10 +25,19 @@
 @property (nonatomic, strong) NSMutableDictionary *itemAttributes;
 @property (nonatomic, strong) NSMutableArray *gridBlocks;
 
+// previous layout cache.  this is to prevent choppiness
+// when we scroll to the bottom of the screen - uicollectionview
+// will repeatedly call layoutattributesforelementinrect on
+// each scroll event.  pow!
 @property (nonatomic, strong) NSArray* previousLayoutAttributes;
 @property (nonatomic, assign) CGRect previousLayoutRect;
+
 @property (nonatomic) BOOL prelayoutEverything;
+
 @property(nonatomic) NSMutableDictionary* indexPathByPosition;
+
+// remember the last indexpath placed, as to not
+// relayout the same indexpaths while scrolling
 @property(nonatomic) NSIndexPath* lastIndexPathPlaced;
 
 @end
@@ -68,7 +77,7 @@
     for (NSInteger i = 0; i < self.itemCount; i ++) {
         NSIndexPath* indexPath = [NSIndexPath indexPathForItem:i inSection:0];
         BSGridRect *gridRect = [self.gridCalculator.gridRects objectAtIndex:indexPath.item];
-        [self setPosition:CGPointMake((CGFloat)gridRect.gridPosition.rowStart, (CGFloat)gridRect.gridPosition.colStart)
+        [self setPosition:CGPointMake((CGFloat)gridRect.gridPosition.colStart, (CGFloat)gridRect.gridPosition.rowStart)
              forIndexPath:indexPath];
         CGRect frame = [self.gridCoordTranslator itemFrameByGridRect:[self.gridCalculator.gridRects objectAtIndex:indexPath.item]];
         CGFloat contentSizeHeight = frame.origin.y + frame.size.height;
@@ -111,9 +120,12 @@
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
     
+    // 如果即将显示的内容区域(其大小略等于屏幕大小)在collection view整个内容区域中的位置与稍前已经显示的区域相同，
+    // 就直接返回已缓存的位置属性集合
     if(CGRectEqualToRect(rect, self.previousLayoutRect)) {
         return self.previousLayoutAttributes;
     }
+    
     self.previousLayoutRect = rect;
     
     
@@ -128,11 +140,15 @@
     // find the indexPaths between those rows
     NSMutableSet* attributes = [NSMutableSet set];
     [self traverseTilesBetweenUnrestrictedDimension:unrestrictedDimensionStart and:unrestrictedDimensionEnd iterator:^(CGPoint point) {
-        NSIndexPath* indexPath = [self indexPathForPosition:point];
+            NSIndexPath* indexPath = [self indexPathForPosition:point];
         
-        if(indexPath) [attributes addObject:[self layoutAttributesForItemAtIndexPath:indexPath]];
-        return YES;
-    }];
+            if(indexPath) {
+                [attributes addObject:[self layoutAttributesForItemAtIndexPath:indexPath]];
+            }
+        
+            return YES;
+        }
+    ];
     
     return (self.previousLayoutAttributes = [attributes allObjects]);
     
@@ -153,12 +169,15 @@
 #pragma mark private methods
 
 - (BOOL) traverseTilesBetweenUnrestrictedDimension:(int)begin and:(int)end iterator:(BOOL(^)(CGPoint))block {
-    BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
+    BOOL isVert = (self.direction == UICollectionViewScrollDirectionVertical);
     
     // the double ;; is deliberate, the unrestricted dimension should iterate indefinitely
-    for(int unrestrictedDimension = begin; unrestrictedDimension<end; unrestrictedDimension++) {
-        for(int restrictedDimension = 0; restrictedDimension<[self restrictedDimensionBlockSize]; restrictedDimension++) {
-            CGPoint point = CGPointMake(isVert? restrictedDimension : unrestrictedDimension, isVert? unrestrictedDimension : restrictedDimension);
+    for(int unrestrictedDimension = begin; unrestrictedDimension < end; unrestrictedDimension++) {
+        for(int restrictedDimension = 0; restrictedDimension < [self restrictedDimensionBlockSize]; restrictedDimension++) {
+            CGPoint point = CGPointMake(
+                                        (isVert? restrictedDimension : unrestrictedDimension),
+                                        (isVert? unrestrictedDimension : restrictedDimension)
+                                    );
             
             if(!block(point)) { return NO; }
         }
@@ -186,7 +205,7 @@
 }
 
 - (NSIndexPath*)indexPathForPosition:(CGPoint)point {
-    BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
+    BOOL isVert = (self.direction == UICollectionViewScrollDirectionVertical);
     
     // to avoid creating unbounded nsmutabledictionaries we should
     // have the innerdict be the unrestricted dimension
@@ -198,7 +217,7 @@
 }
 
 - (void) setPosition:(CGPoint)point forIndexPath:(NSIndexPath*)indexPath {
-    BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
+    BOOL isVert = (self.direction == UICollectionViewScrollDirectionVertical);
     
     // to avoid creating unbounded nsmutabledictionaries we should
     // have the innerdict be the unrestricted dimension
