@@ -22,6 +22,9 @@
 @property (nonatomic, strong) NSMutableDictionary *itemAttributes;
 @property (nonatomic, strong) NSMutableArray *gridBlocks;
 
+@property (nonatomic, strong) NSArray* previousLayoutAttributes;
+@property (nonatomic, assign) CGRect previousLayoutRect;
+
 @end
 
 @implementation BSGridLayout
@@ -47,7 +50,7 @@
     
     for (NSInteger i = 0; i < self.itemCount; i ++) {
         NSIndexPath* indexPath = [NSIndexPath indexPathForItem:i inSection:0];
-        [self.gridBlocks addObject:[self.delegate itemAtIndexPath:indexPath]];
+        [self.gridBlocks addObject:[self.delegate collectionView:self.collectionView layout:self itemAtIndexPath:indexPath]];
     }
     self.gridCalculator.gridBlocks = self.gridBlocks;
     [self.gridCalculator doGridCalculate];
@@ -85,13 +88,23 @@
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
     
+    if(CGRectEqualToRect(rect, self.previousLayoutRect)) {
+        return self.previousLayoutAttributes;
+    }
+    self.previousLayoutRect = rect;
+    
     NSMutableArray *layoutAttributes = [NSMutableArray array];
     
     for (NSInteger i = 0; i < self.itemCount; i ++) {
         NSIndexPath* indexPath = [NSIndexPath indexPathForItem:i inSection:0];
-        [layoutAttributes addObject:[self layoutAttributesForItemAtIndexPath:indexPath]];
+        if (indexPath) [layoutAttributes addObject:[self layoutAttributesForItemAtIndexPath:indexPath]];
     }
-    return layoutAttributes;
+    
+    return self.previousLayoutAttributes = layoutAttributes;
+}
+
+- (void)invalidateLayout {
+    [super invalidateLayout];
 }
 
 

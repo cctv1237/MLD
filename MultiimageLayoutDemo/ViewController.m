@@ -10,7 +10,6 @@
 #import "BSGridLayoutCell.h"
 #import "BSGridLayout.h"
 #import "BSGridBlock.h"
-#import "BSGridLayoutCollectionView.h"
 
 @interface ViewController () <BSGridLayoutDelegate>
 
@@ -26,6 +25,8 @@
     self = [super initWithCollectionViewLayout:[self newGridLayout]];
     if (self) {
         self.gridBlocks = [NSMutableArray array];
+        self.collectionView.backgroundColor = [UIColor whiteColor];
+        [self.collectionView registerClass:[BSGridLayoutCell class] forCellWithReuseIdentifier:ReuseIdentifier];
         // Custom initialization
         // ...
         _itemCount = 20;
@@ -46,8 +47,6 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.collectionView.backgroundColor = [UIColor lightGrayColor];
-    [self.collectionView registerClass:[BSGridLayoutCell class] forCellWithReuseIdentifier: @"multiImageCell"];
     [self.collectionView reloadData];
     
     UIButton *button = [[UIButton alloc] init];
@@ -85,7 +84,7 @@
 
 #pragma mark - LayoutDelegate
 
-- (BSGridBlock *)itemAtIndexPath:(NSIndexPath *)indexPath {
+- (BSGridBlock *)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout itemAtIndexPath:(NSIndexPath *)indexPath {
     
     NSInteger rowSpan = arc4random()%3 + 2;
     NSInteger colSpan = arc4random()%3 + 2;

@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "BSGridLayout.h"
 
+#define ReuseIdentifier @"multiImageCell"
+
 @interface ViewController : UICollectionViewController
 
 @end

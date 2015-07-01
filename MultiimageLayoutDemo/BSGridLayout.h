@@ -13,7 +13,7 @@
 @protocol BSGridLayoutDelegate <UICollectionViewDelegate>
 
 @required
-- (BSGridBlock *)itemAtIndexPath:(NSIndexPath *)indexPath;
+- (BSGridBlock *)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout itemAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 

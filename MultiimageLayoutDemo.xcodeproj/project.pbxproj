@@ -20,7 +20,6 @@
 		ABBE50CC1B413B7900E4B55B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBE50C61B413B7900E4B55B /* ViewController.m */; };
 		ABBE50CF1B413B7900E4B55B /* BSGridLayoutCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBE50CB1B413B7900E4B55B /* BSGridLayoutCell.m */; };
 		ABBE50D11B4141C400E4B55B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABBE50D01B4141C400E4B55B /* Main.storyboard */; };
-		ABC6D37D1B423CCE00E3AC77 /* BSGridLayoutCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC6D37C1B423CCE00E3AC77 /* BSGridLayoutCollectionView.m */; };
 		ABC6D37F1B42643600E3AC77 /* BSGridFreeSpace.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC6D37E1B42643600E3AC77 /* BSGridFreeSpace.m */; };
 		ABC6D3811B42644200E3AC77 /* BSGridCalculator.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC6D3801B42644200E3AC77 /* BSGridCalculator.m */; };
 /* End PBXBuildFile section */
@@ -63,8 +62,6 @@
 		ABBE50CA1B413B7900E4B55B /* BSGridLayoutCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSGridLayoutCell.h; sourceTree = "<group>"; };
 		ABBE50CB1B413B7900E4B55B /* BSGridLayoutCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSGridLayoutCell.m; sourceTree = "<group>"; };
 		ABBE50D01B4141C400E4B55B /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		ABC6D37B1B423CCE00E3AC77 /* BSGridLayoutCollectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BSGridLayoutCollectionView.h; sourceTree = "<group>"; };
-		ABC6D37C1B423CCE00E3AC77 /* BSGridLayoutCollectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSGridLayoutCollectionView.m; sourceTree = "<group>"; };
 		ABC6D37E1B42643600E3AC77 /* BSGridFreeSpace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSGridFreeSpace.m; sourceTree = "<group>"; };
 		ABC6D3801B42644200E3AC77 /* BSGridCalculator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BSGridCalculator.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -114,8 +111,6 @@
 				ABBE50C51B413B7900E4B55B /* ViewController.h */,
 				ABBE50C61B413B7900E4B55B /* ViewController.m */,
 				ABBE50D01B4141C400E4B55B /* Main.storyboard */,
-				ABC6D37B1B423CCE00E3AC77 /* BSGridLayoutCollectionView.h */,
-				ABC6D37C1B423CCE00E3AC77 /* BSGridLayoutCollectionView.m */,
 				ABBE50CA1B413B7900E4B55B /* BSGridLayoutCell.h */,
 				ABBE50CB1B413B7900E4B55B /* BSGridLayoutCell.m */,
 				ABBE50941B40E7A900E4B55B /* Images.xcassets */,
@@ -278,7 +273,6 @@
 				ABBE50AF1B40E7FC00E4B55B /* BSGridLayout.m in Sources */,
 				ABC6D3811B42644200E3AC77 /* BSGridCalculator.m in Sources */,
 				ABBE50BF1B40F6C100E4B55B /* BSGridPosition.m in Sources */,
-				ABC6D37D1B423CCE00E3AC77 /* BSGridLayoutCollectionView.m in Sources */,
 				ABBE50CC1B413B7900E4B55B /* ViewController.m in Sources */,
 				ABBE50CF1B413B7900E4B55B /* BSGridLayoutCell.m in Sources */,
 				ABBE50C41B40F89300E4B55B /* BSGridCoordTranslator.m in Sources */,
