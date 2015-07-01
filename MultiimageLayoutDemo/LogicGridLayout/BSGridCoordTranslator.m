@@ -31,6 +31,10 @@
 
 }
 
+- (CGFloat)gridSideLength {
+    return _gridAbsSideLength;
+}
+
 - (CGRect)itemFrameByGridRect:(BSGridRect *)gridRect {
     
     CGPoint origin = [self translateToAbsPosition:gridRect.gridPosition];

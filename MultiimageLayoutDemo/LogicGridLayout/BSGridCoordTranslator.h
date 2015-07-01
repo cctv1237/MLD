@@ -18,6 +18,8 @@
 
 @interface BSGridCoordTranslator : NSObject
 
+@property (nonatomic, assign, readonly) CGFloat gridSideLength;
+
 - (instancetype)initWithItemSpacing:(CGFloat)itemSpacing margin:(CGFloat)margin background:(UIView *)background;
 
 - (CGRect)itemFrameByGridRect:(BSGridRect *)gridRect;

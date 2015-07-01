@@ -21,7 +21,7 @@
 
 @property (nonatomic, assign) CGFloat itemSpacing;
 @property (nonatomic, assign) CGFloat margin;
-@property (nonatomic, assign) UICollectionViewScrollDirection scrollDirection;
+@property (nonatomic, assign) UICollectionViewScrollDirection direction;
 
 @property (nonatomic, weak) id<BSGridLayoutDelegate> delegate;
 
