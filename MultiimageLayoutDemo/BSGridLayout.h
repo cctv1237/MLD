@@ -14,13 +14,13 @@
 
 @required
 - (BSGridBlock *)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout itemAtIndexPath:(NSIndexPath *)indexPath;
-
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetsForItemAtIndexPath:(NSIndexPath *)indexPath;
 @end
 
 @interface BSGridLayout : UICollectionViewLayout
 
-@property (nonatomic, assign) CGFloat itemSpacing;
-@property (nonatomic, assign) CGFloat margin;
+//@property (nonatomic, assign) CGFloat itemSpacing;
+//@property (nonatomic, assign) CGFloat margin;
 @property (nonatomic, assign) UICollectionViewScrollDirection direction;
 
 @property (nonatomic, weak) id<BSGridLayoutDelegate> delegate;

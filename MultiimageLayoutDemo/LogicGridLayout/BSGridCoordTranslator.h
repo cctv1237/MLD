@@ -20,7 +20,7 @@
 
 @property (nonatomic, assign, readonly) CGFloat gridSideLength;
 
-- (instancetype)initWithItemSpacing:(CGFloat)itemSpacing margin:(CGFloat)margin background:(UIView *)background;
+- (instancetype)initWithCollectionView:(UICollectionView *)collectionView;
 
 - (CGRect)itemFrameByGridRect:(BSGridRect *)gridRect;
 

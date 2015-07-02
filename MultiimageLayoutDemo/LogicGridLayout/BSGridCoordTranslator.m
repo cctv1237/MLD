@@ -11,19 +11,26 @@
 #import "BSGridPosition.h"
 #import "BSGridBlock.h"
 
+@interface BSGridCoordTranslator ()
+
+@property (nonatomic, strong) UICollectionView *collectionView;
+
+@end
+
 @implementation BSGridCoordTranslator {
-    CGFloat _itemSpacing;
-    CGFloat _margin;
+//    CGFloat _itemSpacing;
+//    CGFloat _margin;
     CGFloat _backgroundWidth;
     NSInteger _gridCountInUnscrollDirection;
     CGFloat _gridAbsSideLength;
 }
 
-- (instancetype)initWithItemSpacing:(CGFloat)itemSpacing margin:(CGFloat)margin background:(UIView *)background{
+- (instancetype)initWithCollectionView:(UICollectionView *)collectionView {
     if (self = [super init]) {
-        _itemSpacing = itemSpacing;
-        _margin = margin;
-        _backgroundWidth = background.frame.size.width;
+//        _itemSpacing = itemSpacing;
+//        _margin = margin;
+//        _backgroundWidth = background.frame.size.width;
+        _collectionView = collectionView;
         _gridCountInUnscrollDirection = MAX_COL_COUNT;
         _gridAbsSideLength = [self calculateGridAbsSideLength];
     }
@@ -46,12 +53,12 @@
 #pragma mark - Private
 
 - (CGFloat)calculateGridAbsSideLength {
-    return (_backgroundWidth - 2 * _margin - (_gridCountInUnscrollDirection - 1) * _itemSpacing)
-            / _gridCountInUnscrollDirection;
+    return (_collectionView.frame.size.width
+            - (_collectionView.contentInset.left + _collectionView.contentInset.right)) / _gridCountInUnscrollDirection;
 }
 
 - (CGFloat)translateToAbsLengthByGridLength:(NSInteger)Length {
-    return Length * _gridAbsSideLength + (Length - 1) * _itemSpacing;
+    return Length * _gridAbsSideLength;
 }
 
 - (CGSize)translateToAbsSize:(BSGridBlock *)gridBlock {
@@ -63,7 +70,7 @@
 }
 
 - (CGFloat)translateToAbsCoordByGridCoord:(NSInteger)coord {
-    return _margin + coord * (_gridAbsSideLength + _itemSpacing);
+    return coord * _gridAbsSideLength;
 }
 
 - (CGPoint)translateToAbsPosition:(BSGridPosition *)gridPosition {

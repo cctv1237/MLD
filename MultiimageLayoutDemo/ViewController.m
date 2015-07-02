@@ -79,6 +79,15 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     BSGridLayoutCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ReuseIdentifier forIndexPath:indexPath];
+    
+    UILabel* label = (id)[cell viewWithTag:5];
+    if(!label) label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 30, 20)];
+    label.tag = 5;
+    label.textColor = [UIColor whiteColor];
+    label.text = [NSString stringWithFormat:@"%ld", (long)indexPath.item];
+    label.backgroundColor = [UIColor clearColor];
+    [cell.contentView addSubview:label];
+    
     return cell;
 }
 
@@ -99,6 +108,10 @@
     return [[BSGridBlock alloc] initWithRowSpan:rowSpan
                                         ColSpan:colSpan
                                         Content:[NSString stringWithFormat:@"%d",(int)indexPath.item + 1]];
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetsForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return UIEdgeInsetsMake(5, 5, 5, 5);
 }
 
 @end

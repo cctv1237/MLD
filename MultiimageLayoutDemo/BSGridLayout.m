@@ -46,16 +46,14 @@
 
 - (void)setInitialDefaults {
     _direction = UICollectionViewScrollDirectionVertical;
-    _itemSpacing = MULTIIMAGE_ITEM_SPACING;
-    _margin = MULTIIMAGE_MARGIN;
+//    _itemSpacing = MULTIIMAGE_ITEM_SPACING;
+//    _margin = MULTIIMAGE_MARGIN;
     
     _gridCalculator = [[BSGridCalculator alloc] init];
-    _gridCoordTranslator = [[BSGridCoordTranslator alloc] initWithItemSpacing:self.itemSpacing
-                                                                       margin:self.margin
-                                                                   background:self.collectionView];
-    _blockPixels = CGSizeMake(_gridCoordTranslator.gridSideLength, _gridCoordTranslator.gridSideLength);
+    _gridCoordTranslator = [[BSGridCoordTranslator alloc] initWithCollectionView:self.collectionView];
     _indexPathByPosition = [NSMutableDictionary dictionary];
-    
+    _blockPixels = CGSizeMake(_gridCoordTranslator.gridSideLength, _gridCoordTranslator.gridSideLength);
+
     _itemAttributes = [NSMutableDictionary dictionary];
     _gridBlocks = [NSMutableArray array];
     _itemCount = [self.collectionView numberOfItemsInSection:0];
@@ -92,13 +90,23 @@
 
 - (CGSize)collectionViewContentSize {
     
-    CGFloat contentWidth = self.collectionView.frame.size.width;
-    CGFloat contentHeight = (self.contentSizeHeight > self.collectionView.frame.size.height?  self.contentSizeHeight + _margin : self.collectionView.frame.size.height);
+//    CGFloat contentWidth = self.collectionView.frame.size.width;
+    CGFloat contentHeight = (self.contentSizeHeight > self.collectionView.frame.size.height?  self.contentSizeHeight : self.collectionView.frame.size.height);
+//
+//    return CGSizeMake(contentWidth, contentHeight);
+    BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
     
-    return CGSizeMake(contentWidth, contentHeight);
+    CGRect contentRect = UIEdgeInsetsInsetRect(self.collectionView.frame, self.collectionView.contentInset);
+    if (isVert)
+        return CGSizeMake(CGRectGetWidth(contentRect), contentHeight);
+    else
+        return CGSizeMake(contentHeight, CGRectGetHeight(contentRect));
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    UIEdgeInsets insets = UIEdgeInsetsZero;
+    insets = [[self delegate] collectionView:[self collectionView] layout:self insetsForItemAtIndexPath:indexPath];
     
     UICollectionViewLayoutAttributes *attrs = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
     
@@ -106,7 +114,8 @@
         attrs = [self.itemAttributes objectForKey:indexPath];
     }
     else {
-        attrs.frame = [self.gridCoordTranslator itemFrameByGridRect:[self.gridCalculator.gridRects objectAtIndex:indexPath.item]];
+        CGRect frame = [self.gridCoordTranslator itemFrameByGridRect:[self.gridCalculator.gridRects objectAtIndex:indexPath.item]];
+        attrs.frame = UIEdgeInsetsInsetRect(frame, insets);
         [self.itemAttributes setObject:attrs forKey:indexPath];
 //        CGFloat contentSizeHeight = attrs.frame.origin.y + attrs.frame.size.height;
 //        if (contentSizeHeight > self.contentSizeHeight) {
@@ -187,21 +196,7 @@
 }
 
 - (int) restrictedDimensionBlockSize {
-    BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
-    
-    CGRect contentRect = UIEdgeInsetsInsetRect(self.collectionView.frame, self.collectionView.contentInset);
-    int size = isVert? CGRectGetWidth(contentRect) / self.blockPixels.width : CGRectGetHeight(contentRect) / self.blockPixels.height;
-    
-    if(size == 0) {
-        static BOOL didShowMessage;
-        if(!didShowMessage) {
-            NSLog(@"%@: cannot fit block of size: %@ in content rect %@!  Defaulting to 1", [self class], NSStringFromCGSize(self.blockPixels), NSStringFromCGRect(contentRect));
-            didShowMessage = YES;
-        }
-        return 1;
-    }
-    
-    return size;
+    return MAX_COL_COUNT;
 }
 
 - (NSIndexPath*)indexPathForPosition:(CGPoint)point {
