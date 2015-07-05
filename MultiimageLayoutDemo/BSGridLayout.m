@@ -10,20 +10,18 @@
 #import "BSGridPosition.h"
 #import "BSGridBlock.h"
 #import "BSGridRect.h"
-#import "BSGridCalculator.h"
-#import "BSGridCoordTranslator.h"
+#import "BSGridLayoutLocator.h"
 
 @interface BSGridLayout ()
 
-@property (nonatomic, assign) NSInteger itemCount;
-@property (nonatomic, assign) CGFloat contentSizeHeight;
-@property (nonatomic, assign) CGSize blockPixels;
+@property (nonatomic, assign) NSInteger numOfGridInRestrictedDimension;
 
-@property (nonatomic, strong) BSGridCalculator *gridCalculator;
-@property (nonatomic, strong) BSGridCoordTranslator *gridCoordTranslator;
+@property (nonatomic, assign) CGSize gridUnit;
+@property (nonatomic, assign) NSInteger furthestRow;
 
-@property (nonatomic, strong) NSMutableDictionary *itemAttributes;
-@property (nonatomic, strong) NSMutableArray *gridBlocks;
+@property (nonatomic, strong) BSGridLayoutLocator *gridCalculator;
+
+//@property (nonatomic, strong) NSMutableDictionary *itemAttributes;
 
 // previous layout cache.  this is to prevent choppiness
 // when we scroll to the bottom of the screen - uicollectionview
@@ -35,6 +33,7 @@
 @property (nonatomic) BOOL prelayoutEverything;
 
 @property(nonatomic) NSMutableDictionary* indexPathByPosition;
+@property(nonatomic) NSMutableDictionary* gridRectByIndexPath;
 
 // remember the last indexpath placed, as to not
 // relayout the same indexpaths while scrolling
@@ -46,85 +45,56 @@
 
 - (void)setInitialDefaults {
     _direction = UICollectionViewScrollDirectionVertical;
-//    _itemSpacing = MULTIIMAGE_ITEM_SPACING;
-//    _margin = MULTIIMAGE_MARGIN;
-    
-    _gridCalculator = [[BSGridCalculator alloc] init];
-    _gridCoordTranslator = [[BSGridCoordTranslator alloc] initWithCollectionView:self.collectionView];
+    _numOfGridInRestrictedDimension = 6;
+    [self initGridUnit];
+    _gridCalculator = [[BSGridLayoutLocator alloc] initWithColCount:_numOfGridInRestrictedDimension GridUnit:_gridUnit];
     _indexPathByPosition = [NSMutableDictionary dictionary];
-    _blockPixels = CGSizeMake(_gridCoordTranslator.gridSideLength, _gridCoordTranslator.gridSideLength);
+    _gridRectByIndexPath = [NSMutableDictionary dictionary];
+//    _itemAttributes = [NSMutableDictionary dictionary];
+}
 
-    _itemAttributes = [NSMutableDictionary dictionary];
-    _gridBlocks = [NSMutableArray array];
-    _itemCount = [self.collectionView numberOfItemsInSection:0];
-    
+- (void) initGridUnit {
+    CGFloat sideLength = (self.collectionView.frame.size.width
+                          - (self.collectionView.contentInset.left + self.collectionView.contentInset.right)) / _numOfGridInRestrictedDimension;
+    self.gridUnit = CGSizeMake(sideLength, sideLength);
 }
 
 - (void)prepareLayout {
     [super prepareLayout];
     [self setInitialDefaults];
     
-    for (NSInteger i = 0; i < self.itemCount; i ++) {
-        NSIndexPath* indexPath = [NSIndexPath indexPathForItem:i inSection:0];
-        [self.gridBlocks addObject:[self.delegate collectionView:self.collectionView layout:self itemAtIndexPath:indexPath]];
-        
-    }
-    self.gridCalculator.gridBlocks = self.gridBlocks;
-    [self.gridCalculator doGridCalculate];
+    if (!self.delegate) return;
     
-    for (NSInteger i = 0; i < self.itemCount; i ++) {
-        NSIndexPath* indexPath = [NSIndexPath indexPathForItem:i inSection:0];
-        BSGridRect *gridRect = [self.gridCalculator.gridRects objectAtIndex:indexPath.item];
-        [self setPosition:CGPointMake((CGFloat)gridRect.gridPosition.colStart, (CGFloat)gridRect.gridPosition.rowStart)
-             forIndexPath:indexPath];
-        CGRect frame = [self.gridCoordTranslator itemFrameByGridRect:[self.gridCalculator.gridRects objectAtIndex:indexPath.item]];
-        CGFloat contentSizeHeight = frame.origin.y + frame.size.height;
-        if (contentSizeHeight > self.contentSizeHeight) {
-            self.contentSizeHeight = contentSizeHeight;
-        }
-        
-    }
+    BOOL isVert = [self isVertical];
+    
+    CGRect scrollFrame = CGRectMake(self.collectionView.contentOffset.x, self.collectionView.contentOffset.y,
+                                    self.collectionView.frame.size.width, self.collectionView.frame.size.height);
+    
+    int unrestrictedRow = 0;
+    if (isVert)
+        unrestrictedRow = (CGRectGetMaxY(scrollFrame) / _gridUnit.height)+1;
+    else
+        unrestrictedRow = (CGRectGetMaxX(scrollFrame) / _gridUnit.width)+1;
+    
+    [self fillInBlocksToUnrestrictedRow:unrestrictedRow];
+}
 
-    
+- (void)invalidateLayout {
+    [super invalidateLayout];
 }
 
 - (CGSize)collectionViewContentSize {
-    
-//    CGFloat contentWidth = self.collectionView.frame.size.width;
-    CGFloat contentHeight = (self.contentSizeHeight > self.collectionView.frame.size.height?  self.contentSizeHeight : self.collectionView.frame.size.height);
-//
-//    return CGSizeMake(contentWidth, contentHeight);
-    BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
-    
     CGRect contentRect = UIEdgeInsetsInsetRect(self.collectionView.frame, self.collectionView.contentInset);
-    if (isVert)
+    if ([self isVertical]) {
+        CGFloat contentHeight = self.furthestRow * self.gridUnit.height;
+        if (contentHeight < self.collectionView.frame.size.height) {
+            contentHeight = self.collectionView.frame.size.height;
+        }
         return CGSizeMake(CGRectGetWidth(contentRect), contentHeight);
-    else
-        return CGSizeMake(contentHeight, CGRectGetHeight(contentRect));
-}
-
-- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
-    UIEdgeInsets insets = UIEdgeInsetsZero;
-    insets = [[self delegate] collectionView:[self collectionView] layout:self insetsForItemAtIndexPath:indexPath];
-    
-    UICollectionViewLayoutAttributes *attrs = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
-    
-    if ([self.itemAttributes objectForKey:indexPath]) {
-        attrs = [self.itemAttributes objectForKey:indexPath];
+    } else {
+        # warning 待实现 水平方向滚动的逻辑
+        return CGSizeMake(self.furthestRow * self.gridUnit.width, CGRectGetHeight(contentRect));
     }
-    else {
-        CGRect frame = [self.gridCoordTranslator itemFrameByGridRect:[self.gridCalculator.gridRects objectAtIndex:indexPath.item]];
-        attrs.frame = UIEdgeInsetsInsetRect(frame, insets);
-        [self.itemAttributes setObject:attrs forKey:indexPath];
-//        CGFloat contentSizeHeight = attrs.frame.origin.y + attrs.frame.size.height;
-//        if (contentSizeHeight > self.contentSizeHeight) {
-//            self.contentSizeHeight = contentSizeHeight;
-//        }
-        
-    }
-    
-    return attrs;
 }
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
@@ -137,42 +107,53 @@
     
     self.previousLayoutRect = rect;
     
+    BOOL isVert = [self isVertical];
     
-    BOOL isVert = self.direction == UICollectionViewScrollDirectionVertical;
-    
-    int unrestrictedDimensionStart = isVert? rect.origin.y / self.blockPixels.height : rect.origin.x / self.blockPixels.width;
-    int unrestrictedDimensionLength = (isVert? rect.size.height / self.blockPixels.height : rect.size.width / self.blockPixels.width) + 1;
+    int unrestrictedDimensionStart = isVert? rect.origin.y / self.gridUnit.height : rect.origin.x / self.gridUnit.width;
+    int unrestrictedDimensionLength = (isVert? rect.size.height / self.gridUnit.height : rect.size.width / self.gridUnit.width) + 1;
     int unrestrictedDimensionEnd = unrestrictedDimensionStart + unrestrictedDimensionLength;
     
-//    [self fillInBlocksToUnrestrictedRow:self.prelayoutEverything? INT_MAX : unrestrictedDimensionEnd];
+    [self fillInBlocksToUnrestrictedRow:unrestrictedDimensionEnd];
     
     // find the indexPaths between those rows
     NSMutableSet* attributes = [NSMutableSet set];
     [self traverseTilesBetweenUnrestrictedDimension:unrestrictedDimensionStart and:unrestrictedDimensionEnd iterator:^(CGPoint point) {
             NSIndexPath* indexPath = [self indexPathForPosition:point];
-        
             if(indexPath) {
+//                printf("pos(%d, %d) -> indexPath(%ld, %ld, %ld) \n",
+//                       (int) point.x, (int) point.y,
+//                       indexPath.section, indexPath.row, indexPath.item);
                 [attributes addObject:[self layoutAttributesForItemAtIndexPath:indexPath]];
+            } else {
+//                printf("pos(%d, %d) -> nil indexPath \n",
+//                       (int) point.x, (int) point.y);
             }
         
             return YES;
         }
     ];
     
-    return (self.previousLayoutAttributes = [attributes allObjects]);
+    printf(">>>>>>>> attributes count:%d \n", (int) attributes.count);
     
-//    NSMutableArray *layoutAttributes = [NSMutableArray array];
-//    
-//    for (NSInteger i = 0; i < self.itemCount; i ++) {
-//        NSIndexPath* indexPath = [NSIndexPath indexPathForItem:i inSection:0];
-//        if (indexPath) [layoutAttributes addObject:[self layoutAttributesForItemAtIndexPath:indexPath]];
-//    }
-//    
-//    return self.previousLayoutAttributes = layoutAttributes;
+    return (self.previousLayoutAttributes = [attributes allObjects]);
 }
 
-- (void)invalidateLayout {
-    [super invalidateLayout];
+- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
+    UIEdgeInsets insets = UIEdgeInsetsZero;
+    insets = [[self delegate] collectionView:[self collectionView] layout:self insetsForItemAtIndexPath:indexPath];
+    
+    BSGridRect *gridRect;
+    if ([_gridRectByIndexPath objectForKey:indexPath]) {
+        gridRect = [_gridRectByIndexPath objectForKey:indexPath];
+    } else {
+        BSGridBlock *gridBlock = [self.delegate collectionView:self.collectionView layout:self itemAtIndexPath:indexPath];
+        gridRect = [self.gridCalculator locateOneBlockInAppendMode:gridBlock];
+    }
+    
+    UICollectionViewLayoutAttributes *attrs = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
+    attrs.frame = UIEdgeInsetsInsetRect(gridRect.absFrame, insets);
+    
+    return attrs;
 }
 
 #pragma mark private methods
@@ -182,7 +163,7 @@
     
     // the double ;; is deliberate, the unrestricted dimension should iterate indefinitely
     for(int unrestrictedDimension = begin; unrestrictedDimension < end; unrestrictedDimension++) {
-        for(int restrictedDimension = 0; restrictedDimension < [self restrictedDimensionBlockSize]; restrictedDimension++) {
+        for(int restrictedDimension = 0; restrictedDimension < [self numOfGridInRestrictedDimension]; restrictedDimension++) {
             CGPoint point = CGPointMake(
                                         (isVert? restrictedDimension : unrestrictedDimension),
                                         (isVert? unrestrictedDimension : restrictedDimension)
@@ -195,8 +176,8 @@
     return YES;
 }
 
-- (int) restrictedDimensionBlockSize {
-    return MAX_COL_COUNT;
+- (NSInteger) numOfGridInRestrictedDimension {
+    return _numOfGridInRestrictedDimension;
 }
 
 - (NSIndexPath*)indexPathForPosition:(CGPoint)point {
@@ -225,7 +206,75 @@
         self.indexPathByPosition[restrictedPoint] = [NSMutableDictionary dictionary];
     
     self.indexPathByPosition[restrictedPoint][unrestrictedPoint] = indexPath;
+    
+    printf("indexPath(%ld, %ld, %ld) -> pos(%d, %d) \n",
+           indexPath.section, indexPath.row, indexPath.item,
+           [restrictedPoint intValue], [unrestrictedPoint intValue]);
 }
 
+#pragma mark private methods
+
+- (BOOL) isVertical {
+    return (self.direction == UICollectionViewScrollDirectionVertical);
+}
+
+- (void) fillInBlocksToUnrestrictedRow:(int)endRow {
+    
+    BOOL vert = [self isVertical];
+    
+    // we'll have our data structure as if we're planning
+    // a vertical layout, then when we assign positions to
+    // the items we'll invert the axis
+    
+    NSInteger numSections = [self.collectionView numberOfSections];
+    for (NSInteger section=self.lastIndexPathPlaced.section; section<numSections; section++) {
+        NSInteger numRows = [self.collectionView numberOfItemsInSection:section];
+        
+        for (NSInteger row = (!self.lastIndexPathPlaced ? 0 : self.lastIndexPathPlaced.row + 1); row < numRows; row++) {
+            NSIndexPath* indexPath = [NSIndexPath indexPathForRow:row inSection:section];
+            BSGridRect* gridRect = _gridRectByIndexPath[indexPath];
+            
+            if (gridRect != nil) {
+                printf("indexPath(%ld, %ld, %ld) -> gridRect{pos:(%d, %d), size:(%d, %d)} \n",
+                       indexPath.section, indexPath.row, indexPath.item,
+                       (int) [gridRect colStart], (int) [gridRect rowStart],
+                       (int) [gridRect colSpan], (int) [gridRect rowSpan]);
+
+                continue;
+            } else {
+                BSGridBlock *gridBlock = [self.delegate collectionView:self.collectionView layout:self itemAtIndexPath:indexPath];
+                BSGridRect *gridRect = [_gridCalculator locateOneBlockInAppendMode:gridBlock];
+                
+                [self markGridRectAsUsed:gridRect ByItemAtIndexPath:indexPath];
+                _gridRectByIndexPath[indexPath] = gridRect;
+                
+                self.lastIndexPathPlaced = indexPath;
+                [self setFurthestRowIfGivenRowEndGreater:gridRect.rowEnd];
+                
+                // only jump out if we've already filled up every space up till the resticted row
+                if((vert? [gridRect rowStart] : [gridRect colStart]) >= endRow) {
+                    return;
+                }
+            }
+        }
+        
+        // for debug
+        [_gridCalculator printWholeLayout];
+    }
+}
+
+- (void) setFurthestRowIfGivenRowEndGreater:(NSInteger)aRowEnd {
+    if (aRowEnd > self.furthestRow) {
+        self.furthestRow = aRowEnd;
+    }
+}
+
+- (void) markGridRectAsUsed:(BSGridRect *)gridRect ByItemAtIndexPath:(NSIndexPath *) indexPath {
+    for(NSInteger col = gridRect.colStart; col < gridRect.colEnd; col++) {
+        for (NSInteger row =  gridRect.rowStart; row < gridRect.rowEnd; row++) {
+            [self setPosition:CGPointMake(col, row) forIndexPath:indexPath];
+        }
+    }
+}
 
 @end

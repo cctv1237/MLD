@@ -12,15 +12,19 @@
 
 @interface BSGridRect ()
 
+@property (nonatomic, strong) BSGridPosition *gridPosition;
+@property (nonatomic, strong) BSGridBlock *gridBlock;
+
 @end
 
 @implementation BSGridRect
 
-- (instancetype) initWithGridPosition:(BSGridPosition *)gridPosition GridBlock:(BSGridBlock *)gridBlock {
+- (instancetype) initWithGridPosition:(BSGridPosition *)gridPosition GridBlock:(BSGridBlock *)gridBlock AbsFrame:(CGRect)absFrame {
     
     if ([super init]) {
         self.gridPosition = gridPosition;
         self.gridBlock = gridBlock;
+        self.absFrame = absFrame;
     }
     return self;
 }

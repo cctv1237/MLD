@@ -26,9 +26,8 @@
     if (self) {
         self.gridBlocks = [NSMutableArray array];
         self.collectionView.backgroundColor = [UIColor whiteColor];
-        [self.collectionView registerClass:[BSGridLayoutCell class] forCellWithReuseIdentifier:ReuseIdentifier];
-        // Custom initialization
-        // ...
+        [self.collectionView registerClass:[BSGridLayoutCell class] forCellWithReuseIdentifier:@"cell"];
+//        [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
         _itemCount = 20;
     }
     return self;
@@ -78,7 +77,9 @@
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    BSGridLayoutCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ReuseIdentifier forIndexPath:indexPath];
+    BSGridLayoutCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+//    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+//    cell.backgroundColor = [UIColor redColor];
     
     UILabel* label = (id)[cell viewWithTag:5];
     if(!label) label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 30, 20)];
@@ -104,6 +105,10 @@
     if (colSpan <= 1) {
         colSpan = 2;
     }
+    
+    printf(">>>>> indexPath(%ld, %ld, %ld) item(%d, %d) \n",
+           indexPath.section, indexPath.row, indexPath.item,
+           (int) colSpan, (int) rowSpan);
     
     return [[BSGridBlock alloc] initWithRowSpan:rowSpan
                                         ColSpan:colSpan
