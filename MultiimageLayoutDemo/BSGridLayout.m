@@ -252,7 +252,8 @@
                 [self setFurthestRowIfGivenRowEndGreater:gridRect.rowEnd];
                 
                 // only jump out if we've already filled up every space up till the resticted row
-                if((vert? [gridRect rowStart] : [gridRect colStart]) >= endRow) {
+                // 水平方向的逻辑对不对先不用考虑
+                if((vert? self.furthestRow : [gridRect colStart]) >= endRow) {
                     return;
                 }
             }
