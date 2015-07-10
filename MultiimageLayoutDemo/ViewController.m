@@ -10,6 +10,7 @@
 #import "BSGridLayoutCell.h"
 #import "BSGridLayout.h"
 #import "BSGridBlock.h"
+#import "BSGridLayoutLocator.h"
 
 @interface ViewController () <BSGridLayoutDelegate>
 
@@ -26,9 +27,9 @@
     if (self) {
         self.gridBlocks = [NSMutableArray array];
         self.collectionView.backgroundColor = [UIColor whiteColor];
+        self.collectionView.contentInset = UIEdgeInsetsMake(15, 15, 15, 15);
         [self.collectionView registerClass:[BSGridLayoutCell class] forCellWithReuseIdentifier:@"cell"];
-//        [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
-        _itemCount = 20;
+        _itemCount = 5;
     }
     return self;
 
@@ -56,13 +57,14 @@
 }
 
 - (void)change {
+    
     [self.collectionView performBatchUpdates:^{
         [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:self.itemCount inSection:0]]];
         self.itemCount ++;
     } completion:^(BOOL done) {
         NSLog(@"%d",(int)self.itemCount);
     }];
-
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -78,8 +80,6 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     BSGridLayoutCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-//    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-//    cell.backgroundColor = [UIColor redColor];
     
     UILabel* label = (id)[cell viewWithTag:5];
     if(!label) label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 30, 20)];
@@ -96,8 +96,11 @@
 
 - (BSGridBlock *)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout itemAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSInteger rowSpan = arc4random()%3 + 2;
-    NSInteger colSpan = arc4random()%3 + 2;
+//    NSInteger rowSpan = arc4random()%3 + 2;
+//    NSInteger colSpan = arc4random()%3 + 2;
+    
+    NSInteger rowSpan = 6;
+    NSInteger colSpan = 6;
     
     if (rowSpan <= 1) {
         rowSpan = 2;
@@ -107,7 +110,7 @@
     }
     
     printf(">>>>> indexPath(%ld, %ld, %ld) item(%d, %d) \n",
-           indexPath.section, indexPath.row, indexPath.item,
+           (long)indexPath.section, indexPath.row, indexPath.item,
            (int) colSpan, (int) rowSpan);
     
     return [[BSGridBlock alloc] initWithRowSpan:rowSpan

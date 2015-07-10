@@ -12,7 +12,6 @@
 #import "BSGridBlock.h"
 #import "BSGridRect.h"
 
-#define MAX_ROW_COUNT 1000
 #define INITIAL_CONTENT @"."
 
 @interface BSGridLayoutLocator ()
@@ -68,7 +67,7 @@
     return resultGridRects;
 }
 
-- (BSGridRect *) locateOneBlockInAppendMode:(BSGridBlock *)gridBlock {
+- (BSGridRect *)locateOneBlockInAppendMode:(BSGridBlock *)gridBlock {
     BSGridRect *gridRect = [self locateBlock:gridBlock];
     [self recalcFreePlaces:gridRect];
     
@@ -78,8 +77,14 @@
     return gridRect;
 }
 
+//- (BSGridRect *)shouldAddOneBlock:(BSGridBlock *)gridBlock {
+//    [self.gridBlocks addObject:gridBlock];
+//    self.gridRects = [self locateGridBlocksFromScratch:self.gridBlocks];
+//    return [self.gridRects lastObject];
+//}
+
 // 该方法会清空整个布局管理器，而不管之前状态如何；然后确定给定的grid block列表中每一个元素的位置
-- (NSMutableArray *) locateGridBlocksFromScratch:(NSMutableArray *)gridBlocks {
+- (NSMutableArray *)locateGridBlocksFromScratch:(NSMutableArray *)gridBlocks {
     [self clear];
     return [self locateGridBlocksInAppendMode:gridBlocks];
 }
@@ -118,8 +123,8 @@
     [self initFreePlaces];
     
     self.gridMatrix = nil;
-    self.gridRects = [[NSMutableArray alloc] init];
-    self.gridBlocks = [[NSMutableArray alloc] init];
+    [self.gridRects removeAllObjects];
+    [self.gridBlocks removeAllObjects];
 }
 
 // ---- calculate the location of the given block
@@ -253,7 +258,7 @@
 
 // 将矩阵扩展至指定的行数
 - (void) extendMatrixToRowEnd:(NSInteger)rowEnd {
-    if (rowEnd > self.gridMatrix.count && rowEnd < MAX_ROW_COUNT) {
+    if (rowEnd > self.gridMatrix.count) {
         [self appendNewRows:(rowEnd - self.gridMatrix.count)];
     }
 }
@@ -261,6 +266,9 @@
 // 给矩阵添加指定的行数
 - (void) appendNewRows:(NSInteger)count {
     for (int i = 0; i < count; i++) {
+        if (self.gridMatrix.count == 997) {
+            NSLog(@"");
+        }
         [self.gridMatrix addObject: [self createRowOfMatrix:INITIAL_CONTENT]];
     }
 }

@@ -15,12 +15,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        self.backgroundColor = [UIColor redColor];
-//        CGRect colorFrame = CGRectMake(0, 0, self.contentView.frame.size.width, self.contentView.frame.size.height);
-//        printf("contentView.frame.size:%f, %f", self.contentView.frame.size.width, self.contentView.frame.size.height);
-//        UIView *colorView = [[UIView alloc] initWithFrame:colorFrame];
-//        colorView.backgroundColor = [UIColor redColor];
-//        [self.contentView addSubview:colorView];
+        self.contentView.backgroundColor = [UIColor lightGrayColor];
     }
     return self;
 }

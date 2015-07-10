@@ -11,10 +11,6 @@
 #import "BSGridBlock.h"
 #import "BSGridRect.h"
 
-@interface BSGridFreeSpace ()
-
-@end
-
 @implementation BSGridFreeSpace
 
 - (instancetype)initWithGridPosition:(BSGridPosition *)gridPosition ColSpan:(NSInteger)colSpan {
@@ -77,7 +73,11 @@
 
 - (BOOL)intersectWithVertically:(BSGridRect *)gridRect {
     
-    return (self.rowStart > gridRect.rowStart && self.rowStart < gridRect.rowEnd);
+    return (self.rowStart > gridRect.rowStart && self.rowStart < gridRect.rowEnd)
+    && (
+        (gridRect.colStart >= self.colStart && gridRect.colStart < self.colEnd)
+        || (gridRect.colEnd > self.colStart && gridRect.colEnd <= self.colEnd)
+        );
 }
 
 - (NSMutableArray *)producedFreeSpacesWhenIntersectWithVertically:(BSGridRect *)gridRect {
@@ -97,7 +97,7 @@
 }
 
 - (BOOL)intersectWithFromLeftHorizontally:(BSGridRect *)gridRect {
-    return (self.colStart > gridRect.colStart && self.colStart < gridRect.colEnd);
+    return (self.colStart >= gridRect.colStart && self.colStart < gridRect.colEnd) && (gridRect.rowEnd > self.rowStart);
 }
 
 - (NSMutableArray *)producedFreeSpacesWhenIntersectWithFromLeftHorizontally:(BSGridRect *)gridRect {
@@ -113,7 +113,7 @@
 }
 
 - (BOOL)intersectWithFromRightHorizontally:(BSGridRect *)gridRect {
-    return (self.colEnd > gridRect.colStart && self.colEnd < gridRect.colEnd);
+    return (self.colEnd > gridRect.colStart && self.colEnd <= gridRect.colEnd) && (gridRect.rowEnd > self.rowStart);
 }
 
 - (NSMutableArray *)producedFreeSpacesWhenIntersectWithFromRightHorizontally:(BSGridRect *)gridRect {

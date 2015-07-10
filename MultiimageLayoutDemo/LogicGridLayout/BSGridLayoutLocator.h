@@ -16,6 +16,7 @@
 - (instancetype)initWithColCount:(NSInteger)colCount GridUnit:(CGSize)gridUnit;
 - (NSMutableArray *) locateGridBlocksInAppendMode:(NSMutableArray *)gridBlocks;
 - (BSGridRect *) locateOneBlockInAppendMode:(BSGridBlock *)gridBlock;
+//- (BSGridRect *)shouldAddOneBlock:(BSGridBlock *)gridBlock;
 - (NSMutableArray *) locateGridBlocksFromScratch:(NSMutableArray *)gridBlocks;
 - (void) printWholeLayout;
 
