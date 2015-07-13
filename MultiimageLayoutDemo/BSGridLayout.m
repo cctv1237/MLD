@@ -158,8 +158,9 @@
     if ([_gridRectByIndexPath objectForKey:indexPath]) {
         gridRect = [_gridRectByIndexPath objectForKey:indexPath];
     } else {
-        BSGridBlock *gridBlock = [self.delegate collectionView:self.collectionView layout:self itemAtIndexPath:indexPath];
-        gridRect = [self.locator locateOneBlockInAppendMode:gridBlock];
+//        BSGridBlock *gridBlock = [self.delegate collectionView:self.collectionView layout:self itemAtIndexPath:indexPath];
+//        gridRect = [self.locator locateOneBlockInAppendMode:gridBlock];
+        gridRect = [self addBlockatIndexPath:indexPath];
     }
     
     UICollectionViewLayoutAttributes *attrs = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
@@ -167,20 +168,6 @@
     
     return attrs;
 }
-
-//- (UICollectionViewLayoutAttributes *)layoutAttributesForAddedItemAtIndexPath:(NSIndexPath *)indexPath {
-//    UIEdgeInsets insets = UIEdgeInsetsZero;
-//    insets = [[self delegate] collectionView:[self collectionView] layout:self insetsForItemAtIndexPath:indexPath];
-//    
-//    BSGridRect *gridRect;
-//    BSGridBlock *gridBlock = [self.delegate collectionView:self.collectionView layout:self itemAtIndexPath:indexPath];
-//    gridRect = [self.locator shouldAddOneBlock:gridBlock];
-//    
-//    UICollectionViewLayoutAttributes *attrs = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
-//    attrs.frame = UIEdgeInsetsInsetRect(gridRect.absFrame, insets);
-//    
-//    return attrs;
-//}
 
 - (void)prepareForCollectionViewUpdates:(NSArray *)updateItems {
     [super prepareForCollectionViewUpdates:updateItems];
@@ -235,7 +222,7 @@
     return attributes;
 }
 
-- (void)addBlockatIndexPath:(NSIndexPath *)indexPath{
+- (BSGridRect *)addBlockatIndexPath:(NSIndexPath *)indexPath{
     
     BSGridBlock *gridBlock = [self.delegate collectionView:self.collectionView layout:self itemAtIndexPath:indexPath];
     BSGridRect *gridRect = [_locator locateOneBlockInAppendMode:gridBlock];
@@ -246,7 +233,8 @@
     
     self.lastIndexPathPlaced = indexPath;
     [self setFurthestRowIfGivenRowEndGreater:gridRect.rowEnd];
-
+    
+    return gridRect;
 }
 
 

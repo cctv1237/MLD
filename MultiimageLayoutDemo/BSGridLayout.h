@@ -25,6 +25,5 @@
 
 @property (nonatomic, weak) id<BSGridLayoutDelegate> delegate;
 
-- (void)addBlockatIndexPath:(NSIndexPath *)indexPath;
 
 @end

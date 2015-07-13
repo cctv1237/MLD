@@ -29,7 +29,7 @@
         self.collectionView.backgroundColor = [UIColor whiteColor];
         self.collectionView.contentInset = UIEdgeInsetsMake(15, 15, 15, 15);
         [self.collectionView registerClass:[BSGridLayoutCell class] forCellWithReuseIdentifier:@"cell"];
-        _itemCount = 5;
+        _itemCount = 12;
     }
     return self;
 
@@ -59,7 +59,15 @@
 - (void)change {
     
     [self.collectionView performBatchUpdates:^{
-        [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:self.itemCount inSection:0]]];
+        NSArray *visibleIndexPaths = [self.collectionView indexPathsForVisibleItems];
+        NSIndexPath *toAdd;
+        if (visibleIndexPaths.count == 0) {
+            toAdd =[NSIndexPath indexPathForRow:0 inSection:0];
+        }
+        NSUInteger middle = (NSUInteger)floor(visibleIndexPaths.count / 2);
+        toAdd = [visibleIndexPaths objectAtIndex:middle];
+        
+        [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:toAdd.item inSection:0]]];
         self.itemCount ++;
     } completion:^(BOOL done) {
         NSLog(@"%d",(int)self.itemCount);
@@ -96,11 +104,11 @@
 
 - (BSGridBlock *)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout itemAtIndexPath:(NSIndexPath *)indexPath {
     
-//    NSInteger rowSpan = arc4random()%3 + 2;
-//    NSInteger colSpan = arc4random()%3 + 2;
+    NSInteger rowSpan = arc4random()%3 + 2;
+    NSInteger colSpan = arc4random()%3 + 2;
     
-    NSInteger rowSpan = 6;
-    NSInteger colSpan = 6;
+//    NSInteger rowSpan = 6;
+//    NSInteger colSpan = 6;
     
     if (rowSpan <= 1) {
         rowSpan = 2;
